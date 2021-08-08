@@ -31,7 +31,7 @@ struct Request {
 
 enum Method {
     GET,
-    DELETE,
+    DELETE = 5,
     POST,
     PUT,
     HEAD,

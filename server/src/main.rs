@@ -1,8 +1,11 @@
 fn main() {
-    let get = Method::GET;
-    let delete = Method::DELETE;
+    let get = Method::GET("Hello".to_string());
+    let delete = Method::DELETE(69);
     let post = Method::POST;
-    dbg!(get as u64); dbg!(delete as u64); dbg!(post as u64);
+    // Not possible casting
+    // an `as` expression can only be used to convert between primitive types or to coerce to a specific trait object
+    dbg!(get as String); dbg!(delete as u64); dbg!(post as u64);
+    
     let server = Server::new("127.0.0.1:8080".to_string());
     server.run();
 }
@@ -30,8 +33,8 @@ struct Request {
 }
 
 enum Method {
-    GET,
-    DELETE = 5,
+    GET(String),
+    DELETE(u64),
     POST,
     PUT,
     HEAD,

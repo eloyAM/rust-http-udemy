@@ -13,7 +13,7 @@ impl Server {
         println!("Listening on {}", self.addr);
         let listener: std::net::TcpListener = std::net::TcpListener::bind(&self.addr).unwrap();
 
-        while true {
+        'some_label: loop {
             listener.accept();
         }
     }

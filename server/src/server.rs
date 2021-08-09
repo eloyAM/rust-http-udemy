@@ -14,11 +14,13 @@ impl Server {
         let listener: std::net::TcpListener = std::net::TcpListener::bind(&self.addr).unwrap();
 
         loop {
-            let res = listener.accept();
-            if res.is_err() {
-                continue;
+            match listener.accept() {
+                Ok((stream, _)) => {
+                    let a = 5;
+                    println!("Ok");
+                }
+                Err(e) => println!("Failed to establish the connection: {}", e)
             }
-            let (stream, addr) = res.unwrap();
         }
     }
 }

@@ -14,9 +14,11 @@ impl Server {
         let listener: std::net::TcpListener = std::net::TcpListener::bind(&self.addr).unwrap();
 
         loop {
-            listener.accept();
+            let res = listener.accept();
+            if res.is_err() {
+                continue;
+            }
+            let (stream, addr) = res.unwrap();
         }
-
-        let tuple: (&str, u64) = ("hello", 2);
     }
 }

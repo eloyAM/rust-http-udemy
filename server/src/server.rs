@@ -11,5 +11,6 @@ impl Server {
 
     pub fn run (self) {
         println!("Listening on {}", self.addr);
+        let listener: std::io::Result<std::net::TcpListener> = std::net::TcpListener::bind(&self.addr);
     }
 }

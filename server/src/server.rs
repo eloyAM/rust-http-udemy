@@ -1,3 +1,5 @@
+// use std::io::Read;
+
 pub struct Server {
     addr: String
 }
@@ -15,9 +17,9 @@ impl Server {
 
         loop {
             match listener.accept() {
-                Ok((stream, _)) => {
-                    let a = 5;
-                    println!("Ok");
+                Ok((mut stream, _)) => {
+                    let mut buffer = [0; 1024];
+                    stream.read(&mut buffer);
                 }
                 Err(e) => println!("Failed to establish the connection: {}", e)
             }

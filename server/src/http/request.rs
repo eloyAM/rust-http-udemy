@@ -17,20 +17,17 @@ impl TryFrom<&[u8]> for Request {
     // GET /search?name=abc&sort=1 HTTP/1.1
     fn try_from(buf: &[u8]) -> Result<Self, Self::Error> {
         str::from_utf8(buf)?;
-        // unimplemented!()
+        unimplemented!()
     }
 }
 
 fn get_next_word(request: &str) -> Option<(&str, &str)> {
-    let mut iter = request.chars();
-    loop {
-        let item = iter.next();
-        match item {
-            Some(c) => {}
-            None => break
+    for (i, c) in request.chars().enumerate() {
+        if c == ' ' {
+            return Some((&request[..i], &request[i+1..])); // safe to increase index by one (the byte of the space)
         }
     }
-
+    return None;
 }
 
 pub enum ParseError {

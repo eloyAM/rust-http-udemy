@@ -19,7 +19,7 @@ impl TryFrom<&[u8]> for Request {
         let request = str::from_utf8(buf)?;
         
         let (method, request) = get_next_word(&request).ok_or(ParseError::InvalidRequest)?;
-        let (path, request) = get_next_word(&request).ok_or(ParseError::InvalidRequest)?;
+        let (mut path, request) = get_next_word(&request).ok_or(ParseError::InvalidRequest)?;
         let (protocol, _) = get_next_word(&request).ok_or(ParseError::InvalidRequest)?;
 
         if protocol != "HTTP/1.1" {
@@ -28,13 +28,22 @@ impl TryFrom<&[u8]> for Request {
 
         let method: Method = method.parse()?;
 
+        let mut query_string = None;
+        match path.find('?') {
+            Some(i) => {
+                query_string = Some(&path[i+1..]); // skip the '?' adding one to the index (safe, 1 byte)
+                path = &path[..i];
+            },
+            None => {}
+        }
+
         unimplemented!()
     }
 }
 
 fn get_next_word(request: &str) -> Option<(&str, &str)> {
     for (i, c) in request.chars().enumerate() {
-        if c == ' ' {
+        if c == ' ' || c == '\r' {
             return Some((&request[..i], &request[i+1..])); // safe to increase index by one (the byte of the space)
         }
     }

@@ -29,9 +29,7 @@ impl TryFrom<&[u8]> for Request {
         let method: Method = method.parse()?;
 
         let mut query_string = None;
-        let q = path.find('?');
-        if q.is_some() {
-            let i = q.unwrap();
+        if let Some(i) = path.find('?') {
             query_string = Some(&path[i+1..]); // skip the '?' adding one to the index (safe, 1 byte)
             path = &path[..i];
         }

@@ -18,10 +18,7 @@ impl TryFrom<&[u8]> for Request {
     fn try_from(buf: &[u8]) -> Result<Self, Self::Error> {
         let request = str::from_utf8(buf)?;
         
-        match get_next_word(&request) {
-            Some(method, request) => {},
-            None => return Err(ParseError::InvalidRequest)
-        }
+        let (method, request) = get_next_word(&request).ok_or(ParseError::InvalidRequest)?;
 
         unimplemented!()
     }

@@ -5,13 +5,13 @@ use std::error::Error;
 use std::str;
 use std::str::Utf8Error;
 
-pub struct Request {
-    path: String,
-    query_string: Option<String>,
+pub struct Request<'buf> {
+    path: &'buf str,
+    query_string: Option<&'buf str>,
     method: Method
 }
 
-impl TryFrom<&[u8]> for Request {
+impl<'buf> TryFrom<&[u8]> for Request<'buf> {
     type Error = ParseError;
 
     // GET /search?name=abc&sort=1 HTTP/1.1
@@ -30,12 +30,12 @@ impl TryFrom<&[u8]> for Request {
 
         let mut query_string = None;
         if let Some(i) = path.find('?') {
-            query_string = Some(path[i+1..].to_string()); // skip the '?' adding one to the index (safe, 1 byte)
+            query_string = Some(&path[i+1..]); // skip the '?' adding one to the index (safe, 1 byte)
             path = &path[..i];
         }
 
         Ok(Self {
-            path: path.to_string(),
+            path: path,
             query_string,
             method
         })

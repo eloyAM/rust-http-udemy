@@ -37,6 +37,6 @@ impl<'buf> From<&'buf str> for QueryString<'buf> {
                 .or_insert(Value::Single(val));
         }
 
-        unimplemented!();
+        QueryString { data }
     }
 }
